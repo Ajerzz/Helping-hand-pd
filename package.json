@@ -7,9 +7,16 @@
     "build": "vue-cli-service build"
   },
   "dependencies": {
+    "@vue/composition-api": "^1.0.0-rc.6",
     "core-js": "^3.8.0",
+    "firebase": "^8.3.2",
+    "firebaseui": "^4.8.0",
+    "materialize-css": "^1.0.0-rc.2",
     "vue": "^2.6.12",
-    "vue-router": "^3.4.9"
+    "vue-router": "^3.4.9",
+    "vuefire": "^3.0.0-alpha.2",
+    "vuelidate": "^0.7.6",
+    "vuex": "^3.6.2"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^4.5.9",
