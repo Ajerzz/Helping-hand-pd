@@ -27,3 +27,5 @@ npm run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+### чтобы запустить проект на локальном сервере, в терминале эти команды : npm install node , npm run serve
