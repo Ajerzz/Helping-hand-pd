@@ -1,7 +1,8 @@
 <template>
 <div>
 <div> 
-<button type="button" class="btn btn-primary"><b><i><router-link to="/addvacancy"><font color="white"><p class="fs-3">Добавить вакансию</p></font></router-link></i></b></button></div>
+   <button type="button" class="btn btn-primary"  @click="$router.push('/addvacancy')"> <b><p class="fs-3">Добавить вакансию</p></b></button>
+</div>
   <table class="table">
   <thead class="table-dark">
   

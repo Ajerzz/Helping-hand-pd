@@ -1,7 +1,7 @@
 <template>
 <div>
 <div> 
-<button type="button" class="btn btn-primary"><b><i><router-link to="/addresume"><font color="white"><p class="fs-3">Добавить резюме</p></font></router-link></i></b></button></div>
+ <button type="button" class="btn btn-primary"  @click="$router.push('/addresume')"> <b><p class="fs-3">Добавить резюме</p></b></button></div>
   <table class="table">
   <thead class="table-dark">
   
@@ -19,13 +19,6 @@
       <td>{{ worker.Name }}</td>
       <td>{{ worker.Abilities}}</td>
       <td>{{ worker.Age}}</td>
-      <!-- <td>{{ record.categoryName }}</td> -->
-      <!-- <td>
-        <span 
-          :class="[record.typeClass]"
-          class="white-text badge"
-        >{{ record.typeText }}</span>
-      </td> -->
       <td>
         <button type="button" class="btn btn-success"  @click="$router.push('/detailR/' + worker.id)"> <b><i class="material-icons">Подробно</i></b></button>
       </td>
