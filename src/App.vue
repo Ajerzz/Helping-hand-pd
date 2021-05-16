@@ -1,14 +1,11 @@
 <template>
   <div id="app">
     <thead>
-
-
-    </thead>
-    <h1>
+<h1>
       Helping hand
     </h1>
-
-
+    </thead>
+   
     <router-view />
 
   </div>
