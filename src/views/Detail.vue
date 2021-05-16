@@ -20,7 +20,8 @@
     </div>
   </div>
   </div>
-  <button type="button" class="btn btn-secondary"><li><router-link tag="li" to="/vacancies"><font color="white"><b>Вернуться к списку вакансий</b></font></router-link></li></button>
+
+ <button type="button" class="btn btn-secondary"  @click="$router.push('/vacancies')"> <b><i class="material-icons">Вернуться к списку вакансий</i></b></button> 
 </div>
 </template>
 

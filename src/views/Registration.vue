@@ -14,28 +14,28 @@
             id="name"
             type="text"
             v-model.trim="name"
-            :class="{invalid: $v.name.$dirty && !$v.name.required}"
+            :class="{invalid: (($v.name.$dirty && !$v.name.required) || ($v.name.$dirty && $v.name.maxLength))}"  
         >
+       
         <div class="helper-text invalid" v-if="$v.name.$dirty && !$v.name.required"><font color="red">Введите ваше имя</font></div>
-        
+        <div class="helper-text invalid" v-else-if="($v.name.$dirty && !$v.name.maxLength)"><font color="red">Введите корректное имя</font></div>
+        <div class="helper-text invalid" v-else-if="($v.name.$dirty && !$v.name.numeric)"><font color="red">Допустимо вводить только буквы</font></div>
       </div>
 
-      <!-----YEEEEEEEEEEEEEEEEEEEAAAAAAAAAAAAAAAAAAAAAAAAARSSSS-------------------------------------->
+      <!-----YEEEEEEEEEEEEEEEEEEEAAAAAAAAAAAAAAAAAAAAAAAAARSSSS--------|| ($v.name.$dirty && $v.name.numeric) )}"-----------     //  <div class="helper-text invalid" v-else-if="($v.name.$dirty && $v.name.numeric)"><font color="red">Допустимо вводить только символы</font></div>------------------->
        <label for="age">Год рождения</label>
       <div class="input-field">
         <input
             id="age"
             type="number"
             v-model.number.trim="age"
-            :class="{invalid: $v.age.$dirty && !$v.name.required}"
+            :class="{invalid: ($v.age.$dirty && !$v.name.required) || ($v.age.$dirty && $v.age.minValue)|| ($v.age.$dirty && $v.age.maxValue)}"
         >
 
-         <div class="helper-text invalid" v-if="$v.age.$dirty && !$v.age.required"><font color="red">Введите корректный год рождения</font></div>
+         <div class="helper-text invalid" v-if="(($v.age.$dirty && !$v.name.required) || ($v.age.$dirty && !$v.age.minValue)|| ($v.age.$dirty && !$v.age.maxValue))"><font color="red">Введите корректный год рождения (Вам должно быть больше 14 лет)</font></div>
        
         
          
-       
-
 
       </div>
       <!------------------------------------------->
@@ -44,17 +44,19 @@
        <input @blur="$v.email.$touch()"
       
           class="form-control"
-            id="email"          
+            id="email" 
+            name="email"         
             v-model.trim="email"
              type="text" :class="{invalid: ($v.email.$dirty && !$v.email.required) || ($v.email.$dirty && !$v.email.email)}">
         
         <div class="helper-text invalid" v-if="$v.email.$dirty && !$v.email.required"><font color="red">Поле обязательно для заполнения</font></div>
-        <div class="helper-text invalid" v-if="!$v.email.email"><font color="red">Пожалуйста введите Email адрес</font></div>
+        <div class="helper-text invalid" v-else-if="!$v.email.email"><font color="red">Пожалуйста введите Email адрес</font></div>  
+
+
 
       <label for="password">Придумайте пароль</label>
       <div class="form-group">
          
-        <!-- @blur="$v.password.$touch()" -->
         <input @blur="$v.password.$touch()"
             id="password"
             type="password"
@@ -62,7 +64,7 @@
             v-model.trim="password"
             :class="{invalid: ($v.password.$dirty && !$v.password.required) || ($v.password.$dirty && !$v.password.minLength)}">
        
-        <div class="helper-text invalid" v-if="$v.password.$dirty && !$v.password.required"><font color="red">Введите пароль</font>Введите пароль</div>
+        <div class="helper-text invalid" v-if="$v.password.$dirty && !$v.password.required"><font color="red">Введите пароль</font></div>
         <div class="helper-text invalid" v-else-if="$v.password.$dirty && !$v.password.minLength"><font color="red">Пароль должен быть из {{$v.password.$params.minLength.min}} символов. Сейчас он {{password.length}}</font></div>
         
 
@@ -83,13 +85,12 @@
 
 
       </div>
-
     </div>
     <div class="col-sm-4 mx-auto">
       
        <div>
          <button class="btn btn-primary auth-submit"
-                 type="submit"> Зарегистрироваться </button>
+                 type="submit" > Зарегистрироваться </button>
         
       </div>
 
@@ -98,17 +99,19 @@
         <router-link to="/login">Войти!</router-link>
       </p>
 
-      <router-link to='/'>Выйти на главную</router-link>
+      <div align="center"> <button type="button" class="btn btn-primary"  @click="$router.push('/')"> <b>Выйти на главную</b></button>  </div>
     </div>
   </form>
 </template>
 
 <script>
-import {email, required, minLength, sameAs} from 'vuelidate/lib/validators'
+import {email, required, minLength, sameAs, minValue, maxValue, maxLength, numeric} from 'vuelidate/lib/validators'
+
+//
 
 export default {
-  name: 'register',
-  data: () => ({
+    name: 'register',
+    data: () => ({
     email: '',
     password: '',
     passwordConfirm: '',
@@ -120,8 +123,8 @@ export default {
     email: {email, required},
     password: {required, minLength: minLength(6)},
     passwordConfirm: {required, sameAs: sameAs('password')},
-    name: {required},
-    age: {required}
+    name: {required, maxLength: maxLength(45)},
+    age: {required, minValue: minValue(1903), maxValue: maxValue(2007)}
  
   },
   methods: {
@@ -140,10 +143,17 @@ export default {
 
       try {
         await this.$store.dispatch('register', formData)
-       // await this.$store.dispatch('createRecord', formData)
         this.$router.push('Home2')
-      } catch (e) {}
+      } catch (e) {
+        if(ReferenceError)
+        {
+         alert('Аккаунт с данным email адресом уже существует')
+        }
+
+      }
     }
   }
+  
 }
+
 </script>

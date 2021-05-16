@@ -1,6 +1,7 @@
 <template>
 
   <form  @submit.prevent="submitHandler">
+  <div align="right"> <button type="button" class="btn btn-secondary"  @click="$router.push('/')"> <b><i class="material-icons">Выйти из аккаунта</i></b></button>  </div>
      <h2 class="reg-title">Создать резюме</h2>
     <div class="row g-3 align-items-center">
       
@@ -17,11 +18,11 @@
             id="Name"
             type="text"
             v-model.trim="Name"
-            :class="{invalid: $v.Name.$dirty && !$v.Name.required}"
+            :class="{invalid: (($v.Name.$dirty && !$v.Name.required) || ($v.Name.$dirty && !$v.Name.maxLength))}"
         >
-        <div class="helper-text invalid" v-if="$v.Name.$dirty && !$v.Name.required">
-  <font color="red">Поле обязательно для заполнения</font>
+        <div class="helper-text invalid" v-if="$v.Name.$dirty && !$v.Name.required"><font color="red">Поле обязательно для заполнения</font>
 </div>
+<div class="helper-text invalid" v-if="($v.Name.$dirty && !$v.Name.maxLength)"><font color="red">Введите корректное имя</font></div>
  </div>  
 
 
@@ -34,11 +35,14 @@
             id="Age"
             type="text"
             v-model.trim="Age"
-            :class="{invalid: $v.Age.$dirty && !$v.Age.required}"
+            :class="{invalid: (($v.Age.$dirty && !$v.Age.required)|| ($v.Age.$dirty && $v.Age.minValue)|| ($v.Age.$dirty && $v.Age.maxValue))}"
         >
         <div class="helper-text invalid" v-if="$v.Age.$dirty && !$v.Age.required">
   <font color="red">Поле обязательно для заполнения</font>
-</div>       
+  </div>   
+  <div class="helper-text invalid" v-if="(($v.Age.$dirty && !$v.Age.minValue)|| ($v.Age.$dirty && !$v.Age.maxValue))">
+  <font color="red">Введите корректный возраст</font>
+    </div>   
 </div>
 
   <!------------------------------------------------>
@@ -52,11 +56,12 @@
             id="Description"
             type="text"
             v-model.trim="Description"
-            :class="{invalid: $v.Description.$dirty && !$v.Description.required}"
+            :class="{invalid: (($v.Description.$dirty && !$v.Description.required) || ($v.Name.$dirty && !$v.Name.maxLength))}"
         >
         <div class="helper-text invalid" v-if="$v.Description.$dirty && !$v.Description.required">
   <font color="red">Поле обязательно для заполнения</font>
 </div>
+<div class="helper-text invalid" v-if="($v.Description.$dirty && !$v.Description.maxLength)"><font color="red">Введите корректное имя</font></div>
  </div>
   <!------------------------------------------------>
 
@@ -71,14 +76,15 @@
             id="Abilities"
             type="text"
             v-model.trim="Abilities"
-            :class="{invalid: $v.Abilities.$dirty && !$v.Abilities.required}"
+            :class="{invalid: (($v.Abilities.$dirty && !$v.Abilities.required) || ($v.Name.$dirty && !$v.Name.maxLength))}"
         >
         <div class="helper-text invalid" v-if="$v.Abilities.$dirty && !$v.Abilities.required">
   <font color="red">Поле обязательно для заполнения</font>
 </div>
+<div class="helper-text invalid" v-if="($v.Abilities.$dirty && !$v.Abilities.maxLength)"><font color="red">Введите корректное имя</font></div>
  </div>
  
- <label for="Telephone"><b> Номер </b></label>
+ <label for="Telephone"><b> Номер / email </b></label>
       
       <div class="form-group">
         
@@ -87,11 +93,12 @@
             id="Telephone"
             type="text"
             v-model.number.trim="Telephone"
-            :class="{invalid: $v.Telephone.$dirty && !$v.Telephone.required}"
+            :class="{invalid: (($v.Telephone.$dirty && !$v.Telephone.required) || ($v.Name.$dirty && !$v.Name.maxLength))}"
         >
         <div class="helper-text invalid" v-if="$v.Telephone.$dirty && !$v.Telephone.required">
   <font color="red">Поле обязательно для заполнения</font>
 </div>
+<div class="helper-text invalid" v-if="($v.Telephone.$dirty && !$v.Telephone.maxLength)"><font color="red">Введите корректное имя</font></div>
  </div>
   
    <hr>
@@ -105,19 +112,17 @@
 
        <div>
          <button class="btn btn-primary auth-submit"
-                 type="submit"> Добавить резюме </button>
+                 type="submit"><h4> Добавить резюме</h4> </button>
 
       </div>
-
-
-
-      <router-link to='/Home2'>Выйти на главную</router-link>
+      <hr>
+ <div><button type="button" class="btn btn-danger"  @click="$router.push('/Home2')"> <b>Выйти на главную</b></button> </div>
     </div>
   </form>
 </template>
 
 <script>
-import {email, required, minLength, sameAs} from 'vuelidate/lib/validators'
+import {email, required, minValue, maxValue, maxLength, numeric} from 'vuelidate/lib/validators'
 
 export default {
   name: 'worker',
@@ -131,11 +136,11 @@ export default {
     agree: false
   }),
  validations: {
-   Abilities: {required},
-    Age: {required},
-    Description: {required},
-Name: {required},
-    Telephone: {required}
+    Abilities: {required, maxLength: maxLength(45)},
+    Age: {required, minValue: minValue(14), maxValue: maxValue(100)},
+    Description: {required, maxLength: maxLength(180)},
+    Name: {required, maxLength: maxLength(45)},
+    Telephone: {required, maxLength: maxLength(45)}
   },
   methods: {
     async submitHandler() {

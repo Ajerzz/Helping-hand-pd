@@ -10,16 +10,15 @@
       
      <div class="form-group">
          <label for="$v.email"><b>Введите ваш Email </b> </label>
-        <!-- @blur="$v.email.conn" -->
         <input @blur="$v.email.$touch()"
-      
+           
           class="form-control"
             id="email"          
             v-model.trim="email"
              type="text" :class="{invalid: ($v.email.$dirty && !$v.email.required) || ($v.email.$dirty && !$v.email.email)}">
+  
         <div class="helper-text invalid" v-if="$v.email.$dirty && !$v.email.required"><font color="red">Поле обязательно для заполнения</font></div>
-        <div class="helper-text invalid" v-if="!$v.email.email"><font color="red">Пожалуйста введите Email адрес</font></div>
-        
+        <div class="helper-text invalid" v-else-if="!$v.email.email"><font color="red">Пожалуйста введите Email адрес</font></div>
       </div>
 
 
@@ -27,7 +26,6 @@
 
       <div class="form-group">
          <label for="password"><b>Пароль</b></label>
-        <!-- @blur="$v.password.$touch()" -->
         <input @blur="$v.password.$touch()"
         class="form-control"
             id="password"
@@ -53,7 +51,7 @@
         Нет аккаунта?
         <router-link to="/registration">Зарегистрироваться</router-link>
       </p>
-       <router-link to='/'>Выйти на главную</router-link>
+       <div align="center"> <button type="button" class="btn btn-primary"  @click="$router.push('/')"> <b>Выйти на главную</b></button>  </div>
     </div>
   </form>
   </div>
@@ -63,13 +61,13 @@
 <script>
 import {email, required, minLength} from 'vuelidate/lib/validators'
 import messages from '@/utils/messages'
-
-
+   
 export default {
   name: 'login',
   data: () => ({
     email: '',
-    password: ''
+    password: '',
+    agree: false
   }),
   validations: {
     email: {email, required},
@@ -89,13 +87,16 @@ export default {
       const formData = {
         email: this.email,
         password: this.password
-      }
-
+      }   
       try {
+
         await this.$store.dispatch('login', formData)
         this.$router.push('Home2')
-      } catch (e) {}
+      } catch (e) {
+        alert('Неверное сочетание адреса электронной почты и пароля');
+      }
     }
   }
 }
 </script>
+

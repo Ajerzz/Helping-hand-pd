@@ -19,8 +19,8 @@
      <b>Пожалуйста авторизуйтесь или пройдите простой процесс регистрации, чтобы иметь возможность добавить своё резюме или просмотреть доступные вакансии 
        </b> </h2>
     </div>
-
-    <button type="button" class="btn btn-primary"><b><i><router-link to="/login"><font color="white">Войти в систему/Зарегистрироваться</font></router-link></i></b></button>
+<div align="center"> <button type="button" class="btn btn-primary"  @click="$router.push('/login')"> <b><i class="material-icons">Войти в систему/Зарегистрироваться</i></b></button>  </div>  
+    
 <h4>
     <img src="./HH.jpg" alt="альтернативный текст" width="600">
 </h4>

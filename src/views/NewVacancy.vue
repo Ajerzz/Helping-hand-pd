@@ -1,6 +1,7 @@
 <template>
 
   <form  @submit.prevent="submitHandler">
+    <div align="right"> <button type="button" class="btn btn-secondary"  @click="$router.push('/')"> <b><i class="material-icons">Выйти из аккаунта</i></b></button>  </div>
      <h2 class="reg-title">Добавление вакансии</h2>
     <div class="row g-3 align-items-center">
       
@@ -16,11 +17,10 @@
             id="Title"
             type="text"
             v-model.trim="Title"
-            :class="{invalid: $v.Title.$dirty && !$v.Title.required}"
+            :class="{invalid: (($v.Title.$dirty && !$v.Title.required) || ($v.Title.$dirty && !$v.Title.maxLength))}"
         >
-        <div class="helper-text invalid" v-if="$v.Title.$dirty && !$v.Title.required">
-  <font color="red">Поле обязательно для заполнения</font>
-</div>       
+        <div class="helper-text invalid" v-if="$v.Title.$dirty && !$v.Title.required"><font color="red">Поле обязательно для заполнения</font></div>       
+<div class="helper-text invalid" v-else-if="($v.Title.$dirty && !$v.Title.maxLength)"><font color="red">Введите корректное название</font></div>
 </div>
 
   <!------------------------------------------------>
@@ -34,11 +34,12 @@
             id="Description"
             type="text"
             v-model.trim="Description"
-            :class="{invalid: $v.Description.$dirty && !$v.Description.required}"
+            :class="{invalid: (($v.Description.$dirty && !$v.Description.required) || ($v.Description.$dirty && !$v.Description.maxLength))}"
         >
         <div class="helper-text invalid" v-if="$v.Description.$dirty && !$v.Description.required">
   <font color="red">Поле обязательно для заполнения</font>
 </div>
+<div class="helper-text invalid" v-else-if="($v.Description.$dirty && !$v.Description.maxLength)"><font color="red">Введите корректное описание</font></div>
  </div>
   <!------------------------------------------------>
 
@@ -51,11 +52,12 @@
             id="Address"
             type="text"
             v-model.trim="Address"
-            :class="{invalid: $v.Address.$dirty && !$v.Address.required}"
+            :class="{invalid: (($v.Address.$dirty && !$v.Address.required) || ($v.Address.$dirty && !$v.Address.maxLength))}"
         >
         <div class="helper-text invalid" v-if="$v.Address.$dirty && !$v.Address.required">
   <font color="red">Поле обязательно для заполнения</font>
 </div>
+<div class="helper-text invalid" v-else-if="($v.Address.$dirty && !$v.Address.maxLength)"><font color="red">Введите корректный адрес</font></div>
  </div>
 <!------------------------------------------------>
  <label for="Name"><b> Имя </b></label>
@@ -67,14 +69,15 @@
             id="Name"
             type="text"
             v-model.trim="Name"
-            :class="{invalid: $v.Name.$dirty && !$v.Name.required}"
+            :class="{invalid: (($v.Name.$dirty && !$v.Name.required) || ($v.Name.$dirty && !$v.Name.maxLength))}"
         >
         <div class="helper-text invalid" v-if="$v.Name.$dirty && !$v.Name.required">
   <font color="red">Поле обязательно для заполнения</font>
 </div>
+<div class="helper-text invalid" v-else-if="($v.Name.$dirty && !$v.Name.maxLength)"><font color="red">Введите корректное имя</font></div>
  </div>
  <!------------------------------------------------>
- <label for="Telephone"><b> Номер </b></label>
+ <label for="Telephone"><b> Номер / email </b></label>
       
       <div class="form-group">
         
@@ -83,11 +86,12 @@
             id="Telephone"
             type="text"
             v-model.number.trim="Telephone"
-            :class="{invalid: $v.Telephone.$dirty && !$v.Telephone.required}"
+            :class="{invalid: (($v.Telephone.$dirty && !$v.Telephone.required) || ($v.Telephone.$dirty && !$v.Telephone.maxLength))}"
         >
         <div class="helper-text invalid" v-if="$v.Telephone.$dirty && !$v.Telephone.required">
   <font color="red">Поле обязательно для заполнения</font>
 </div>
+<div class="helper-text invalid" v-else-if="($v.Telephone.$dirty && !$v.Telephone.maxLength)"><font color="red">Введите корректный Номер / email</font></div>
  </div>
       <!------------------------------------------------>
        <label for="CountP"><b> Количество работников </b></label>
@@ -99,9 +103,10 @@
             id="CountP"
             type="text"
             v-model.trim="CountP"
-            :class="{invalid: $v.CountP.$dirty && !$v.CountP.required}"
+            :class="{invalid: (($v.CountP.$dirty && !$v.CountP.required) || ($v.CountP.$dirty && !$v.CountP.minValue)|| ($v.CountP.$dirty && !$v.CountP.maxValue))}"
         >
-        <div class="helper-text invalid" v-if="$v.CountP.$dirty && !$v.CountP.required"><font color="red">Поле обязательно для заполнения</font></div>
+        <div class="helper-text invalid" v-if="(($v.CountP.$dirty && !$v.CountP.required))"><font color="red">Поле обязательно для заполнения</font></div>
+         <div class="helper-text invalid" v-if="(($v.CountP.$dirty && !$v.CountP.minValue)|| ($v.CountP.$dirty && !$v.CountP.maxValue))"><font color="red">Введите приемлемое чило работников(Не больше 11)</font></div>
       </div>
    <!------------------------------------------------>
    <hr>
@@ -115,19 +120,17 @@
 
        <div>
          <button class="btn btn-primary auth-submit"
-                 type="submit"> Добавить вакансию </button>
+                 type="submit"><h4> Добавить вакансию</h4> </button>
 
       </div>
-
-
-
-      <router-link to='/Home2'>Выйти на главную</router-link>
-    </div>
+      <hr>
+ <div><button type="button" class="btn btn-danger"  @click="$router.push('/Home2')"> <b>Выйти на главную</b></button> </div>
+</div>
   </form>
 </template>
 
 <script>
-import {email, required, minLength, sameAs} from 'vuelidate/lib/validators'
+import {required, minValue, maxValue, maxLength } from 'vuelidate/lib/validators'
 
 export default {
   name: 'record',
@@ -142,12 +145,12 @@ export default {
     agree: false
   }),
  validations: {
-    CountP: {required},
-    Title: {required},
-    Description: {required},
-    Address: {required},
-    Name: {required},
-    Telephone: {required}
+    CountP: {required, minValue: minValue(1), maxValue: maxValue(10)},
+    Title: {required, maxLength: maxLength(45)},
+    Description: {required, maxLength: maxLength(180)},
+    Address: {required , maxLength: maxLength(45)},
+    Name: {required , maxLength: maxLength(45)},
+    Telephone: {required , maxLength: maxLength(45)}
   },
   methods: {
     async submitHandler() {

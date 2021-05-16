@@ -1,10 +1,12 @@
 <template>
   <div>
-  <div> <router-link to='/Home2'><h3><p align="right">Вернуться на начальную страницу</p></h3></router-link></div>
+    <div align="right"> <button type="button" class="btn btn-secondary"  @click="$router.push('/')"> <b><i class="material-icons">Выйти из аккаунта</i></b></button>  </div> 
+  
     <div class="page-title">
       <p class="fs-1"><b>Список резюме</b></p>
+     <loader v-if="loading"/>
     </div>
-    
+
     <p class="center" v-if="!workers.length">
       На данный момент нет доступных резюме. 
       <router-link to="/addresume">Добавьте первое</router-link>
@@ -13,11 +15,15 @@
     <section v-else>
       <HistoryRTable :workers="workers" />
     </section>
+ <div align="center"> <button type="button" class="btn btn-primary"  @click="$router.push('/Home2')"> <b><i class="material-icons">Вернуться на начальную страницу</i></b></button>  </div>  
+     
+
   </div>
-</template>
+</template> 
 
 <script>
 import HistoryRTable from '@/components/HistoryRTable'
+import Loader from '@/components/Loader'
 
 
 export default {
@@ -28,7 +34,7 @@ export default {
 
   }),
   async mounted() {
-    // this.records = await this.$store.dispatch('fetchRecords')
+    
     const workers = await this.$store.dispatch('fetchResume')
 
     this.workers = workers.map(worker => {
@@ -40,7 +46,8 @@ export default {
     this.loading = false
   },
   components: {
-    HistoryRTable
+    HistoryRTable,
+    Loader
   }
 }
 </script>
